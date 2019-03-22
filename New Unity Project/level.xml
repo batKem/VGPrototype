@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<items xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <item id="-3,-3" value="Floor" />
+  <item id="0,-3" value="Floor" />
+  <item id="3,-3" value="Floor" />
+  <item id="0,0" value="Floor" />
+  <item id="6,-3" value="Floor" />
+</items>
