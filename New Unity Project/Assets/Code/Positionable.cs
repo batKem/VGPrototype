@@ -8,8 +8,7 @@ public class Positionable  {
 	private Sprite sprite;
 	private GameObject gameObject;
 
-    //currently unused
-	private Vector2 position;
+   
 
 	public Positionable(Vector2 position, Sprite sprite){
 		// /!\ this call instantiates a new object in the game world
@@ -18,7 +17,7 @@ public class Positionable  {
 		this.gameObject.AddComponent<SpriteRenderer>();
 
 		this.sprite = sprite;
-		this.position = position;
+		this.gameObject.transform.position = position;
 		updateGraphics();
 
 	}

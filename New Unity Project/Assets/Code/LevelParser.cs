@@ -4,20 +4,24 @@ using System.Xml.Serialization;
 using System.IO;
 using UnityEngine;
 
-public class LevelParser  {
+public class LevelParser : List<Positionable>  {
 
-    // Mohamed- Making this function to get rid of the big code in the main function
+    // Mohamed- Making this class to get rid of the big code in the main function
+    Dictionary<string, Sprite> editorSprites;
 
-
-    public LevelParser() {
-
+    public LevelParser(string path) : base() {
+        loadRessources();
+        generateMap(path);
     }
-
-    private Dictionary<string, Sprite> loadRessources()
+    //Initializes datastructures and loads Sprite files 
+    //(second part not used for now : will be used later to read actors positions from a xml level file)
+    public void loadRessources()
     {
+        //this.entities = new List<Positionable>();
+
         List<Sprite> spriteList = new List<Sprite>(Resources.LoadAll<Sprite>("Sprites/"));
         Debug.Log(spriteList.Count);
-        Dictionary<string, Sprite>  editorSprites = new Dictionary<string, Sprite>();
+        this.editorSprites = new Dictionary<string, Sprite>();
         foreach (Sprite s in spriteList)
         {
             if (!editorSprites.ContainsKey(s.name))
@@ -26,40 +30,44 @@ public class LevelParser  {
 
             }
         }
-        return editorSprites;
     }
 
-    private List<Positionable> generateMap(string path, Dictionary<string, Sprite> editorSprites)
+    //Helper function for loadRessources()
+    public void generateMap(string path)
     {
-        List<Positionable> positionables = new List<Positionable>();
-        // Sereialization item generation 
-        XmlSerializer serializer = new XmlSerializer(typeof(item[]),
-                                 new XmlRootAttribute() { ElementName = "items" });
 
-        FileStream fileStreamIn = new FileStream(path, FileMode.Open);
-        item[] i = (item[])serializer.Deserialize(fileStreamIn);
-        foreach (item j in i)
+        if (path != null)
         {
-            positionables.Add(getInstanceFromName(toVector(j.id), j.value, editorSprites));
+            
+            // Sereialization item generation 
+            XmlSerializer serializer = new XmlSerializer(typeof(item[]),
+                                     new XmlRootAttribute() { ElementName = "items" });
 
+            FileStream fileStreamIn = new FileStream(path, FileMode.Open);
+            item[] i = (item[])serializer.Deserialize(fileStreamIn);
+            foreach (item j in i)
+            {
+                this.Add(getInstanceFromName(toVector(j.id), j.value));
+
+            }
+            fileStreamIn.Close();
+            //return positionables;
         }
-        fileStreamIn.Close();
-        return positionables;
     }
-
-    private Positionable getInstanceFromName(Vector2 position, string name, Dictionary<string, Sprite> editorSprites)
+    //Helper function for loadRessources()
+    private Positionable getInstanceFromName(Vector2 position, string name)
     {
         switch (name)
         {
 
-            case "Floor": return new Positionable(position, getSpriteFromName(name, editorSprites));
-            case "Boar": return new Positionable(position, getSpriteFromName(name, editorSprites));
+            case "Floor": return new Positionable(position, getSpriteFromName(name));
+            case "Boar": return new Positionable(position, getSpriteFromName(name));
                 /* ... */
         }
         return null;
     }
-
-    private Sprite getSpriteFromName(string name, Dictionary<string, Sprite> editorSprites )
+    //Helper function for loadRessources()
+    private Sprite getSpriteFromName(string name)
     {
         if (editorSprites.ContainsKey(name))
         {
@@ -69,7 +77,7 @@ public class LevelParser  {
         return null;
     }
 
-
+    //Helper function for loadRessources()
     private Vector2 toVector(string s)
     {
         string[] sp = s.Split(',');
@@ -77,8 +85,7 @@ public class LevelParser  {
         //Debug.Log("reading" +v);
         return v;
     }
-
-
+    //Helper class for loadRessources() (xml parse pattern)
     public class item
     {
         [XmlAttribute]

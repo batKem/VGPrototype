@@ -134,7 +134,7 @@ public class LevelEditor : MonoBehaviour {
                 if (  !m.ContainsKey( toVector(j.id))){
                 m.Add(  toVector(j.id), j.value);
                 if (editorSprites.ContainsKey(j.value)){
-                        
+                        //Debug.Log(toVector(j.id) + " - " + j.value);
                         this.levelRenderer.Add(toVector(j.id), new Positionable(toVector(j.id),editorSprites[j.value]));
                 }
                 }
