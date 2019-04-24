@@ -19,7 +19,7 @@ public class Player :Actor{
     public Player(Vector2 pos, Sprite sp) : base(pos,sp){}
     public Player(Vector2 pos) : base(pos, Resources.Load<Sprite>("Sprites/Tile")) {
         this.getGameObject().transform.localScale = absoluteSize;
-
+        this.GetRigidbody2D().constraints = RigidbodyConstraints2D.FreezeRotation;
         
         //TODO: camera follow on the player (currently static)
         //this.mainCamera = this.getGameObject().AddComponent<Camera>();
@@ -58,9 +58,9 @@ public class Player :Actor{
         if (Input.GetKey(KeyCode.Z)) {
             Vector3 verticalImpulse = new Vector3(0.0f, 4.0f, 0.0f);
 
-            
+            float isFalling = velocityVect.y <= 0.01f ? 1.0f : 0.0f;
 
-            velocityVect += groundDetection*(verticalImpulse / mass);
+            velocityVect += groundDetection* isFalling *(verticalImpulse / mass);
         }
         
 
