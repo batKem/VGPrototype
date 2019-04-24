@@ -14,15 +14,15 @@ public class Player :Actor{
     public Vector3 velocityVect, acceleration;
     private float friction = 0.15f;
     private Vector3 absoluteSize = new Vector3(0.2f, 0.3f, 1);
-    private Camera mainCamera;
+    private GameObject mainCamera;
 
     public Player(Vector2 pos, Sprite sp) : base(pos,sp){}
     public Player(Vector2 pos) : base(pos, Resources.Load<Sprite>("Sprites/Tile")) {
         this.getGameObject().transform.localScale = absoluteSize;
         this.GetRigidbody2D().constraints = RigidbodyConstraints2D.FreezeRotation;
-        
+
         //TODO: camera follow on the player (currently static)
-        //this.mainCamera = this.getGameObject().AddComponent<Camera>();
+        this.mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         //this.mainCamera = GameObject.Instantiate(mainCamera, getPosition(), Quaternion.identity);
     }
 
@@ -30,7 +30,7 @@ public class Player :Actor{
         
         this.setPosition(getPosition() + move() );
         this.updateGraphics();
-        //this.mainCamera.gameObject.transform.position = getPosition();
+        this.mainCamera.transform.position = getCameraPosition();
         
     }
 
@@ -93,7 +93,11 @@ public class Player :Actor{
         return isColliding;
     }
     
+    private Vector3 getCameraPosition()
+    {
+        return new Vector3(getPosition().x, mainCamera.gameObject.transform.position.y, mainCamera.gameObject.transform.position.z);
 
+    }
 
     //TODO: make a custom vector class that inherits Vector3 and add these methods to it
     private Vector2 argMinX(Vector3 vec, Vector3 that)
