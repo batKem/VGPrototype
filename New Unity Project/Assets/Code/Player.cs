@@ -52,7 +52,7 @@ public class Player :Actor{
         }
 
 
-        groundDetection = isCollidingWithTag(null) ? 1.0f : 0.0f;
+        groundDetection = isCollidingWithTag("floor") ? 1.0f : 0.0f;
         velocityVect -= velocityVect * friction;
 
         if (Input.GetKey(KeyCode.Z)) {
@@ -71,16 +71,15 @@ public class Player :Actor{
 
     //external collision check with tags, null will check against all objects
     bool isCollidingWithTag(string tag) {
-
+        bool isColliding = false;
         if (tag == null)
         {
             foreach (GameObject obj in GameObject.FindObjectsOfType<GameObject>() )
             {
                 if (obj.GetComponent<BoxCollider2D>() != null)
 
-                    return GetCapsuleCollider2D().IsTouching(obj.GetComponent<BoxCollider2D>());
+                    isColliding = GetCapsuleCollider2D().IsTouching(obj.GetComponent<BoxCollider2D>()) ? true: isColliding;
             }
-            return false;
         }
         else
         {
@@ -88,10 +87,10 @@ public class Player :Actor{
             {
                 if (obj.GetComponent<BoxCollider2D>() != null)
 
-                    return GetCapsuleCollider2D().IsTouching(obj.GetComponent<BoxCollider2D>());
+                    isColliding = GetCapsuleCollider2D().IsTouching(obj.GetComponent<BoxCollider2D>()) ? true : isColliding;
             }
-            return false;
         }
+        return isColliding;
     }
     
 
