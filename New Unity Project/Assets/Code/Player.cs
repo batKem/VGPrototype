@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player :Actor{
 
     public float velocity = 0.1f;
-    private float inHorizontalForce = 0.1f;
+    private float inHorizontalForce = 0.2f;
     private float maxAbsolutSpeed = 1.0f;
     private float mass = 8.0f;
 
@@ -52,26 +52,48 @@ public class Player :Actor{
         }
 
 
+        groundDetection = isCollidingWithTag(null) ? 1.0f : 0.0f;
         velocityVect -= velocityVect * friction;
 
         if (Input.GetKey(KeyCode.Z)) {
-            Vector3 verticalImpulse = new Vector3(0.0f, 100.0f, 0.0f);
+            Vector3 verticalImpulse = new Vector3(0.0f, 4.0f, 0.0f);
+
+            
+
             velocityVect += groundDetection*(verticalImpulse / mass);
         }
-
         
 
         return  boundVectOnAxis( velocityVect,0, -1.0f, 1.0f) ;
     }
 
 
-    void OnCollisionEnter(Collision colider) {
-        groundDetection = 1.0f;
-        Debug.Log("hittin smth");
+
+    //external collision check with tags, null will check against all objects
+    bool isCollidingWithTag(string tag) {
+
+        if (tag == null)
+        {
+            foreach (GameObject obj in GameObject.FindObjectsOfType<GameObject>() )
+            {
+                if (obj.GetComponent<BoxCollider2D>() != null)
+
+                    return GetCapsuleCollider2D().IsTouching(obj.GetComponent<BoxCollider2D>());
+            }
+            return false;
+        }
+        else
+        {
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag(tag))
+            {
+                if (obj.GetComponent<BoxCollider2D>() != null)
+
+                    return GetCapsuleCollider2D().IsTouching(obj.GetComponent<BoxCollider2D>());
+            }
+            return false;
+        }
     }
-    void OnCollisionExit(Collision colider) {
-        groundDetection = 0.0f;
-    }
+    
 
 
     //TODO: make a custom vector class that inherits Vector3 and add these methods to it

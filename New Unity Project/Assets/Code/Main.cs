@@ -18,7 +18,7 @@ public class Main : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		if(this.entities != null){
 			foreach( Positionable a in this.entities){
 				a.update();
