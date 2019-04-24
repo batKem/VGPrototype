@@ -11,7 +11,12 @@ abstract public class Actor : Positionable{
 		this.physicsComponent = this.getGameObject().AddComponent<Rigidbody2D>();
         this.colliderComponent = this.getGameObject().AddComponent<CapsuleCollider2D>();
     }
-	
+    public Rigidbody2D GetRigidbody2D() {
+        return this.physicsComponent;
+    }
+    public CapsuleCollider2D GetCapsuleCollider2D() {
+        return this.colliderComponent;
+    }
 	
 
 	
